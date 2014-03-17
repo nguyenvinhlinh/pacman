@@ -59,7 +59,7 @@ char * readFile(char * fileName,char * authorName, char * mapLevel, int * cols, 
 	}
 	//Print input parameter after doing somthing
 }
-
+/*
 void main(){
 	char file[] = "level1.pac";
 	char name[100] = "Linh";
@@ -88,3 +88,4 @@ void main(){
 		printf("\n");
 	}
 }
+*/
