@@ -5,3 +5,4 @@
   This function will return an array of char
  */
 char * readFile(char * fileName,char * authorName, char * mapLevel, int * rows, int * cols);
+

@@ -26,7 +26,7 @@ char * readFile(char * fileName,char * authorName, char * mapLevel, int * cols, 
 	file = fopen(filePath, "r");
 	if(file == NULL){
 		printf("Cannot find file.\n");
-	  	return;
+	  	return NULL;
 	} else {		
 		//Take information from file and paste it to input pointer
 		char buffer[100];

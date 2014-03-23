@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "writefile.h"
 void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  rows, char * mapArray){
 	FILE *file;
 	char buffer[100];
@@ -60,7 +60,7 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 
 	}
 }
-
+/*
 void main(){
 	char fileName[] = "NEWFILE.pac";
 	char author[100] = "Linh";
@@ -86,3 +86,4 @@ void main(){
 
 	free(mapArray);
 }
+*/
