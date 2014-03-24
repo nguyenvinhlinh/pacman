@@ -10,14 +10,14 @@ void renderMap(char * mapArray, int rows, int cols){
 		printf("%c ", mapArray[i]);
 	}
 	printf("\n");
-	for (i = 0; i < rows; i++) {
+	/*for (i = 0; i < rows; i++) {
 		for (j = 0; j < cols; j++) {
 		   printf("%c ", mapArray[cols * i + j]);
 		}
-	}
+		}*/
 	for (i = 0; i < rows; i++) {
 		for (j = 0; j < cols; j++) {
-			char c = mapArray[rows * i + j];
+			char c = mapArray[cols * i + j];
 			//	printf("%c ", c);
 			if (c == 'q' || c == 'Q') {
 				addch(ACS_ULCORNER);
@@ -45,5 +45,6 @@ void renderMap(char * mapArray, int rows, int cols){
 				addch(' ');
 			}
 		}
+		printw("\n");
 	}
 }

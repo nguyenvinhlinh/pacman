@@ -52,12 +52,8 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 				}
 				printf("row: %d, col: %d, char:  %c,origin  char %c \n", i, j,  buffer[cols * i + j],mapArray[cols * i +j]);
 			}
-			
 		}
-		
-		//close file. DONE
 		fclose(file);
-
 	}
 }
 /*
