@@ -6,15 +6,6 @@ void renderMap(char * mapArray, int rows, int cols){
 //	(void) cbreak();
 //	(void) noecho();
 	int i,j;
-	for (i = 0; i < rows * cols; i++) {
-		printf("%c ", mapArray[i]);
-	}
-	printf("\n");
-	/*for (i = 0; i < rows; i++) {
-		for (j = 0; j < cols; j++) {
-		   printf("%c ", mapArray[cols * i + j]);
-		}
-		}*/
 	for (i = 0; i < rows; i++) {
 		for (j = 0; j < cols; j++) {
 			char c = mapArray[cols * i + j];

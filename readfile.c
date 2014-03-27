@@ -6,11 +6,11 @@ char * readFile(char * fileName,char * authorName, char * mapLevel, int * cols, 
 	FILE * file;
 	char filePath[50] = "../levels/";
 	//Print input parameter
-	printf("%s\n", fileName);
+/*	printf("%s\n", fileName);
 	printf("%s\n", authorName);
 	printf("%s\n", mapLevel);
 	printf("%d\n", cols[0]);
-	printf("%s", filePath);
+	printf("%s", filePath);*/
 
 	//append the filepath with the file name
 	//printf("\nAppending\n");
@@ -25,7 +25,7 @@ char * readFile(char * fileName,char * authorName, char * mapLevel, int * cols, 
 	//printf("File path after appending: %s\n", filePath);
 	file = fopen(filePath, "r");
 	if(file == NULL){
-		printf("Cannot find file.\n");
+		//	printf("Cannot find file.\n");
 	  	return NULL;
 	} else {		
 		//Take information from file and paste it to input pointer
