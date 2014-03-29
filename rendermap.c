@@ -18,20 +18,28 @@ void renderMap(char * mapArray, int rows, int cols){
 				addch(ACS_URCORNER);
 			} else if (c == 'a' || c == 'd') {
 				addch(ACS_VLINE);
-			} else if (c == 's') {
-				addch(ACS_BULLET);
-			} else if (c == 'S') {
-				addch(ACS_BLOCK);
 			} else if (c == 'z' || c == 'Z') {
 				addch(ACS_LLCORNER);
 			} else if (c == 'c' || c == 'C') {
 				addch(ACS_LRCORNER);
+			} else if (c == 'W'){
+				addch(ACS_TTEE);
+			} else if (c == 'D'){
+				addch(ACS_RTEE);
+			} else if (c == 'X'){
+				addch(ACS_BTEE);
+			} else if(c == 'A'){
+				addch(ACS_LTEE);
+			} else if (c == 's') {
+				addch(ACS_BULLET);
+			} else if (c == 'S') {
+				addch(ACS_DIAMOND);
 			} else if (c == 'g' || c == 'G') {
-				addch('G');
+				addch(ACS_CKBOARD);
 			} else if (c == 'p' || c == 'P') {
-				addch('P');
+				addch(ACS_PI);
 			} else if (c == 'f' || c == 'F') {
-				addch('F');
+				addch(ACS_STERLING);
 			} else if (c == ' ') {
 				addch(' ');
 			}

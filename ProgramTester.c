@@ -7,6 +7,7 @@
 #include <ncurses.h>
 #include <string.h>
 #include <stddef.h>
+/* #include <editcell.h> */
 int lauchSemiCommandMode(char * fileName, char * authorName, char * mapLevel, int * rows, int * cols, char * mapArray, int * isQuit ){
 	int isQuitFromFunction = 0;
 	while(1){
@@ -54,7 +55,6 @@ int lauchSemiCommandMode(char * fileName, char * authorName, char * mapLevel, in
 							//map is loaded, no error
 							isQuitFromFunction = 1;
 						}
-						
 						move(0,0);
 						printw("File not found!");
 						break;
@@ -121,6 +121,7 @@ void  main(){
 	
 	//from Here, it will be a part of full command mode
 	while(quit == 0){
+		noecho();
 		int c = getch();
 		if (c == KEY_RIGHT) {
 			move(getcury(stdscr), getcurx(stdscr) + 1);
@@ -189,8 +190,14 @@ void  main(){
 						break;
 					} else if (strcmp(token1, "w")== 0 && token2 == NULL){
 						writeFile(fileName , authorName, mapLevel, cols[0], rows[0], mapArray);
-						move(0,0);
+						getmaxyx(stdscr,h,w);
+						move(h-1,0);
 						printw("Printed to file named %s", fileName);
+						break;
+					} else {
+						getmaxyx(stdscr,h,w);
+						move(h-1,0);
+						printw("Invalid command!");
 						break;
 					}
 				}
@@ -205,22 +212,30 @@ void  main(){
 				addch(ACS_URCORNER);
 			} else if (c == 'a' || c == 'd') {
 				addch(ACS_VLINE);
-			} else if (c == 's') {
-				addch(ACS_BULLET);
-			} else if (c == 'S') {
-				addch(ACS_BLOCK);
 			} else if (c == 'z' || c == 'Z') {
 				addch(ACS_LLCORNER);
 			} else if (c == 'c' || c == 'C') {
 				addch(ACS_LRCORNER);
+			} else if (c == 'W'){
+				addch(ACS_TTEE);
+			} else if (c == 'D'){
+				addch(ACS_RTEE);
+			} else if (c == 'X'){
+				addch(ACS_BTEE);
+			} else if(c == 'A'){
+				addch(ACS_LTEE);
+			} else if (c == 's') {
+				addch(ACS_BULLET);
+			} else if (c == 'S') {
+				addch(ACS_DIAMOND);
 			} else if (c == 'g' || c == 'G') {
-				addch('G');
+				addch(ACS_CKBOARD);
 			} else if (c == 'p' || c == 'P') {
-				addch('P');
+				addch(ACS_PI);
 			} else if (c == 'f' || c == 'F') {
-				addch('F');
+				addch(ACS_STERLING);
 			} else if (c == ' ') {
-				addch(' ');				
+				addch(' ');
 			}
 		}		
 	}
