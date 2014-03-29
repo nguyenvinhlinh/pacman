@@ -5,15 +5,6 @@
 char * readFile(char * fileName,char * authorName, char * mapLevel, int * cols, int * rows){
 	FILE * file;
 	char filePath[50] = "../levels/";
-	//Print input parameter
-/*	printf("%s\n", fileName);
-	printf("%s\n", authorName);
-	printf("%s\n", mapLevel);
-	printf("%d\n", cols[0]);
-	printf("%s", filePath);*/
-
-	//append the filepath with the file name
-	//printf("\nAppending\n");
 	int i;
 	int j = 0;
 
@@ -34,13 +25,13 @@ char * readFile(char * fileName,char * authorName, char * mapLevel, int * cols, 
 		//Author name
 	   	for (i = 0; i < 100; i++) {
 			authorName[i] = buffer[i];
-			if(buffer[i]== '\0')break;
+			if(buffer[i+1]== '\n')break;
 		}
 		//map level info
 		fgets(buffer, 100, file);
 		for (i = 0; i < 100; i++) {
 			mapLevel[i] = buffer[i];
-			if(buffer[i]== '\0')break;
+			if(buffer[i+1]== '\n')break;
 		}
 		//number of rows and cols. also pasre the value of cols to *cols
 		fgets(buffer,100,file);
@@ -55,6 +46,7 @@ char * readFile(char * fileName,char * authorName, char * mapLevel, int * cols, 
 				mapArray[cols[0] * i + j] = buffer[j];
 			}
 		}
+		fclose(file);
 		return mapArray;
 	}
 	//Print input parameter after doing somthing

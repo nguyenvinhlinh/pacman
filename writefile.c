@@ -3,18 +3,18 @@
 #include "writefile.h"
 void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  rows, char * mapArray){
 	FILE *file;
-	char buffer[100];
+	char buffer[100] = "../levels/";
 	//open new file with file name from char pointer fileName
 	int i,j;
 	for (i = 0; i < 100; i++) {
-		buffer[i] = fileName[i];
-		if(buffer[i] == '\0'){
+		buffer[i+10] = fileName[i];
+		if(fileName[i+1] == '\0'){
 			break;
 		}
 	}
 	file = fopen(buffer, "w");
 	if(file == NULL){
-		printf("Error occurs\n");
+//		printf("Error occurs\n");
 	} else {
 //read and write the author to file
 		
@@ -50,7 +50,7 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 				} else {
 					fprintf(file, "%c", buffer[cols*i+j]);
 				}
-				printf("row: %d, col: %d, char:  %c,origin  char %c \n", i, j,  buffer[cols * i + j],mapArray[cols * i +j]);
+//				printf("row: %d, col: %d, char:  %c,origin  char %c \n", i, j,  buffer[cols * i + j],mapArray[cols * i +j]);
 			}
 		}
 		fclose(file);
