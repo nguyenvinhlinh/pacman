@@ -116,7 +116,7 @@ void  main(){
 	printw("Map level: %s\n", mapLevel);
 	printw("Number of Rows: %d\n", rows[0]);
 	printw("Number of Cols: %d\n", cols[0]);
-	renderMap(mapArray, rows[0], cols[0]);
+	renderMap(mapArray, rows[0], cols[0]);  
 	noecho();
 	
 	//from Here, it will be a part of full command mode
