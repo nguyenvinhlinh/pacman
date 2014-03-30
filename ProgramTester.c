@@ -27,7 +27,7 @@ int lauchSemiCommandMode(char * fileName, char * authorName, char * mapLevel, in
 				//if the last input is enter, analyze whole input and
 				//execute
 				if(buffer[i] == '\n'){
-					printw("Enter");
+					//	printw("Enter");
 					//from now, this function will analyze the whole
 					//buffer to choose suitable function include read
 					//file, new file, and quit
@@ -93,7 +93,7 @@ void  main(){
 	(void) cbreak();
 	(void) noecho();
 	//finished initing curses context
-	char file[] = "level1.pac";
+	char file[] = "demofile.pac";
 	char name[100] = "unknown";
 	char level[100] = "unknown";
 	
@@ -133,6 +133,11 @@ void  main(){
 			move(getcury(stdscr) + 1, getcurx(stdscr));
 		}else if (c == ':') {
 			getmaxyx(stdscr,h,w);
+			//clean the last row and move curse to the h-1,0
+			move(h-1,0);
+			for (int i = 0; i < w; i++) {
+				addch(' ');
+			}
 			move(h-1,0);
 			echo();
 			addch(':');
@@ -154,7 +159,11 @@ void  main(){
 						quit = 1;
 						break;
 					} else if (strcmp(token1,"r") == 0 && token2 != NULL){
-						char * buff = readFile(token2, authorName, mapLevel, cols, rows);
+						char bufferauthorName[100] = " ";
+						char bufferlevel[100] = " ";
+						char * pointerAuthor = &bufferauthorName[0];
+						char * pointerlevel = &bufferlevel[0];
+						char * buff = readFile(token2, pointerAuthor, pointerlevel, cols, rows);
 					   
 						if (buff == NULL){
 							printw("File not found!");
@@ -163,6 +172,14 @@ void  main(){
 								mapArray[i] = buff[i];
 							}
 							fileName = token2;
+							//push bask to name and level variable
+							for (int i = 0;i < 100 ; i++) {
+								name[i] = bufferauthorName[i];
+							}
+							for (int i = 0;i < 100 ; i++) {
+								level[i] = bufferlevel[i];
+							}
+
 							clear();
 							move(0,0);
 						 	printw("File name: %s\n", fileName);
@@ -170,13 +187,13 @@ void  main(){
 							printw("Map level: %s\n", mapLevel);
 							printw("Number of Rows: %d\n", rows[0]);
 							printw("Number of Cols: %d\n", cols[0]);
-							renderMap(mapArray, rows[0], cols[0]);
-							
+							renderMap(mapArray, rows[0], cols[0]);				
 						}
 						break;
 					} else if (strcmp(token1, "w") == 0 && token2 != NULL){
 						fileName = token2;
 						writeFile(fileName , authorName, mapLevel, cols[0], rows[0], mapArray);
+						
 						getmaxyx(stdscr,h,w);
 						move(h-1,0);
 						printw("Printed to file named %s", fileName);
