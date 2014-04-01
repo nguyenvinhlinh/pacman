@@ -4,6 +4,19 @@
 void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  rows, char * mapArray){
 	FILE *file;
 	char buffer[100] = "../levels/";
+	for (int i = 0;;i++) {
+		if(fileName[i] == NULL){
+			if(fileName[i-1] != 'c' || fileName[i-2] != 'a' || fileName[i-3] != 'p' || fileName[i-4] != '.') {
+				fileName[i] = '.';
+				fileName[i+1] = 'p';
+				fileName[i+2] = 'a';
+				fileName[i+3] = 'c';
+				fileName[i+4] = NULL;
+			}
+			break;
+		}
+	}
+
 	//open new file with file name from char pointer fileName
 	int i,j;
 	for (i = 0; i < 100; i++) {
@@ -13,6 +26,9 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 			break;
 		}
 	}
+	
+
+	
 	file = fopen(buffer, "w");
 	if(file == NULL){
 //		printf("Error occurs\n");
@@ -54,6 +70,7 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 //				printf("row: %d, col: %d, char:  %c,origin  char %c \n", i, j,  buffer[cols * i + j],mapArray[cols * i +j]);
 			}
 		}
+		fprintf(file, "\n");
 		
 	}
 	fclose(file);
