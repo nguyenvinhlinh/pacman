@@ -1,13 +1,11 @@
 #include "readfile.h"
 #include "rendermap.h"
 #include "writefile.h"
-#include "editcell.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
 #include <string.h>
 #include <stddef.h>
-/* #include <editcell.h> */
 int lauchSemiCommandMode(char * fileName, char * authorName, char * mapLevel, int * rows, int * cols, char * mapArray, int * isQuit ){
 	int isQuitFromFunction = 0;
 	while(1){
@@ -46,45 +44,208 @@ int lauchSemiCommandMode(char * fileName, char * authorName, char * mapLevel, in
 					} else if (strcmp(token1, "r") == 0 && token2 != NULL) {
 						//read the file name token2
 						move(0,0);
-						fileName = token2;
+						for (int i = 0;; i++) {
+							fileName[i] = token2[i];
+							if(fileName[i] == NULL)break;
+						}
+
+						
 						char * buff  = readFile(fileName,authorName, mapLevel, cols, rows);
 						for (int i = 0; i < rows[0] * cols[0]; i++) {
 							mapArray[i] = buff[i];
 						}
-						if(cols[0] != 0){
+						if(buff != NULL){
 							//map is loaded, no error
 							isQuitFromFunction = 1;
+						} else {
+							getmaxyx(stdscr,h,w);
+							move(h-1,0);
+							printw("File not found!");
 						}
-						move(0,0);
-						printw("File not found!");
+
 						break;
 					} else if (strcmp(token1, "n") == 0 && token2 != NULL && token3 != NULL && token4 != NULL) {
 						//create a new level with token3 rows and token4 columns
 						//if value of token 2 and 3 is not an integer and out of
 						//valid range, report error!
-						
-						printw("Make new file\n");
+						//check if token3 and token4 are integer.
+						while (1) {
+							fileName[i] = token2[i];
+							if(fileName[i] == NULL)break;
+						}
+						rows[0] = atoi(token3);
+						cols[0] = atoi(token4);
+						for (int i = 0; i < rows[0] * cols[0]; i++) {
+							mapArray[i] = ' ';
+						}
+
 						isQuitFromFunction = 1;
+						break;
 					} else {
 						printw("Invalid command!\n");
-					   
 						break;
 					}
 				}
 				//if the last input is ESC, quit current loop
 				if(buffer[i] == 27){
-					printw("ESC");
+					int h,w;
+					getmaxyx(stdscr,h,w);
+					//clean the last row and move curse to the h-1,0
+					move(h-1,0);
+					for (int i = 0; i < w; i++) {
+						addch(' ');
+					}
+					move(h-1,0);
 					break;
 				}
-				if(buffer[i] == 263 && i >= 1){
-					i = i - 2;
-				}	
 			}
 		}
 		//now, we will use a loop to take every single input char
 		
 
 	}
+}
+void fullCommandMode(char * fileName, char * authorName, char * mapDescription, int * rows, int * cols, char * mapArray, int * isQuit){
+	int h,w;
+	getmaxyx(stdscr,h,w);
+	//clean the last row and move curse to the h-1,0
+	move(h-1,0);
+	for (int i = 0; i < w; i++) {
+		addch(' ');
+	}
+	move(h-1,0);
+	echo();
+	addch(':');
+//take input from user
+	char buffer[100]= " ";
+	for (int i = 0 ; i < 100; i++) {
+		buffer[i] = getch();
+		if(buffer[i] == '\n'){
+			printw("%s", buffer);
+			char delimeter[] = " ";
+			char *token1, *token2, *token3, *token4;
+			buffer[i] = ' ';
+			char *cp = strdup(buffer);		
+			token1 = strtok(cp, delimeter);
+			token2 = strtok(NULL, delimeter);
+			token3 = strtok(NULL, delimeter);
+			token4 = strtok(NULL, delimeter);
+					
+			if(strcmp(token1, "q") == 0){
+				isQuit[0] = 1;
+				break;
+			} else if (strcmp(token1,"r") == 0 && token2 != NULL){
+				char bufferauthorName[100] = " ";
+				char bufferlevel[100] = " ";
+				int c = 0;
+				int r = 0;
+				char * pointerAuthor = &bufferauthorName[0];
+				char * pointerlevel = &bufferlevel[0];
+				int * pointerCols = &c;
+				int * pointerRows = &r;
+				char * buff = readFile(token2, pointerAuthor, pointerlevel, pointerCols, pointerRows);
+					   
+				if (buff == NULL){
+					getmaxyx(stdscr,h,w);
+					//clean the last row and move curse to the h-1,0
+					move(h-1,0);
+					for (int i = 0; i < w; i++) {
+						addch(' ');
+					}
+					move(h-1,0);
+					printw("File not found!");
+				} else {
+					//fileName
+					for (int i = 0;; i++) {
+						fileName[i] = token2[i];
+						if(fileName[i] == NULL)break;
+					}
+					//map array
+					for (int i = 0; i < cols[0] * rows[0]; i++) {
+						mapArray[i] = buff[i];
+					}
+					//push bask to name and level variable
+					for (int i = 0;i < 100 ; i++) {
+						authorName[i] = pointerAuthor[i];
+						if(authorName[i] == NULL)break;
+					}
+					//level description
+					for (int i = 0;i < 100 ; i++) {
+						mapDescription[i] = pointerlevel[i];
+						if(mapDescription[i] == NULL)break;
+					}
+					//rows and cols
+					rows[0] = pointerRows[0];
+					cols[0] = pointerCols[0];
+							
+					clear();
+					move(0,0);
+					printw("File name: %s\n", fileName);
+					printw("AuthorName: %s\n", authorName);
+					printw("Map level: %s\n", mapDescription);
+					printw("Number of Rows: %d\n", rows[0]);
+					printw("Number of Cols: %d\n", cols[0]);
+					renderMap(mapArray, rows[0], cols[0]);				
+				}
+				break;
+			} else if (strcmp(token1, "w") == 0 && token2 != NULL){
+				for (int i = 0;; i++) {
+					fileName[i] = token2[i];
+					if(fileName[i] == NULL)break;
+				}
+				writeFile(fileName , authorName, mapDescription, cols[0], rows[0], mapArray);
+				getmaxyx(stdscr,h,w);
+				move(h-1,0);
+				for (int i = 0 ; i < w; i++) {
+					addch(' ');
+				}
+				move(h-1,0);
+				printw("Printed to file named %s", fileName);
+				break;
+			} else if (strcmp(token1, "wq") == 0){
+				writeFile(fileName, authorName, mapDescription, cols[0], rows[0], mapArray);
+				getmaxyx(stdscr,h,w);
+				move(h-1,0);
+				for (int i = 0 ; i < w; i++) {
+					addch(' ');
+				}
+				move(h-1,0);
+				printw("Printed to file named %s", fileName);
+						
+				isQuit[0] = 1;
+				break;
+			} else if (strcmp(token1, "w")== 0 && token2 == NULL){
+				writeFile(fileName , authorName, mapDescription, cols[0], rows[0], mapArray);
+				getmaxyx(stdscr,h,w);
+				move(h-1,0);
+				printw("Printed to file named %s", fileName);
+				break;
+			} else {
+				getmaxyx(stdscr,h,w);
+				move(h-1,0);
+				printw("Invalid command!");
+				break;
+			}
+		} else if (buffer[i] == 27){
+			getmaxyx(stdscr,h,w);
+			move(h-1,0);
+			for (int i = 0 ; i < w; i++) {
+				addch(' ');
+			}
+			move(0,0);
+			break;									  
+		}
+	}
+}
+void cleanLastRow(){
+	int h,w;
+	getmaxyx(stdscr,h,w);
+	move(h-1,0);
+	for (int i = 0; i < w; i++) {
+		addch(' ');
+	}
+	move(h-1,0);
+
 }
 void  main(){
 	//init curses context
@@ -93,7 +254,7 @@ void  main(){
 	(void) cbreak();
 	(void) noecho();
 	//finished initing curses context
-	char file[] = "demofile.pac";
+	char file[100] = "demofile.pac";
 	char name[100] = "unknown";
 	char level[100] = "unknown";
 	
@@ -132,126 +293,61 @@ void  main(){
 		} else if (c == KEY_DOWN) {
 			move(getcury(stdscr) + 1, getcurx(stdscr));
 		}else if (c == ':') {
-			getmaxyx(stdscr,h,w);
-			//clean the last row and move curse to the h-1,0
-			move(h-1,0);
-			for (int i = 0; i < w; i++) {
-				addch(' ');
-			}
-			move(h-1,0);
-			echo();
-			addch(':');
-//take input from user
-			char buffer[100];
-			for (int i = 0 ; i < 100; i++) {
-				buffer[i] = getch();
-				if(buffer[i] == '\n'){
-					char delimeter[] = " ";
-					char *token1, *token2, *token3, *token4;
-				   	buffer[i] = ' ';
-					char *cp = strdup(buffer);		
-					token1 = strtok(cp, delimeter);
-					token2 = strtok(NULL, delimeter);
-					token3 = strtok(NULL, delimeter);
-					token4 = strtok(NULL, delimeter);
-					
-					if(strcmp(token1, "q") == 0){
-						quit = 1;
-						break;
-					} else if (strcmp(token1,"r") == 0 && token2 != NULL){
-						char bufferauthorName[100] = " ";
-						char bufferlevel[100] = " ";
-						char * pointerAuthor = &bufferauthorName[0];
-						char * pointerlevel = &bufferlevel[0];
-						char * buff = readFile(token2, pointerAuthor, pointerlevel, cols, rows);
-					   
-						if (buff == NULL){
-							printw("File not found!");
-						} else {
-							for (int i = 0; i < cols[0] * rows[0]; i++) {
-								mapArray[i] = buff[i];
-							}
-							fileName = token2;
-							//push bask to name and level variable
-							for (int i = 0;i < 100 ; i++) {
-								name[i] = bufferauthorName[i];
-							}
-							for (int i = 0;i < 100 ; i++) {
-								level[i] = bufferlevel[i];
-							}
-
-							clear();
-							move(0,0);
-						 	printw("File name: %s\n", fileName);
-							printw("AuthorName: %s\n", authorName);
-							printw("Map level: %s\n", mapLevel);
-							printw("Number of Rows: %d\n", rows[0]);
-							printw("Number of Cols: %d\n", cols[0]);
-							renderMap(mapArray, rows[0], cols[0]);				
-						}
-						break;
-					} else if (strcmp(token1, "w") == 0 && token2 != NULL){
-						fileName = token2;
-						writeFile(fileName , authorName, mapLevel, cols[0], rows[0], mapArray);
-						
-						getmaxyx(stdscr,h,w);
-						move(h-1,0);
-						printw("Printed to file named %s", fileName);
-						break;
-					} else if (strcmp(token1, "wq") == 0){
-						writeFile(fileName, authorName, mapLevel, cols[0], rows[0], mapArray);
-						getmaxyx(stdscr,h,w);
-						move(h-1,0);
-						printw("Printed to file named %s", fileName);
-						quit = 1;
-						break;
-					} else if (strcmp(token1, "w")== 0 && token2 == NULL){
-						writeFile(fileName , authorName, mapLevel, cols[0], rows[0], mapArray);
-						getmaxyx(stdscr,h,w);
-						move(h-1,0);
-						printw("Printed to file named %s", fileName);
-						break;
-					} else {
-						getmaxyx(stdscr,h,w);
-						move(h-1,0);
-						printw("Invalid command!");
-						break;
-					}
-				}
-			}
+			(void)fullCommandMode(fileName, authorName,mapLevel, rows, cols, mapArray, isQuit);
 		}
 		if(getcury(stdscr) > 4 && getcury(stdscr) <= 4 + rows[0] && getcurx(stdscr) < cols[0]){
+			int currentRow;
+			int currentCol;
+			getyx(stdscr, currentRow, currentCol);
+			currentRow = currentRow - 5;
+			//	printw("rows: %d, col: %d \n",currentRow, currentCol );
 			if (c == 'q' || c == 'Q') {
+				mapArray[cols[0] * currentRow + currentCol] = 'q';
 				addch(ACS_ULCORNER);
 			} else if (c == 'w' || c == 'x') {
+				mapArray[cols[0] * currentRow + currentCol] = 'w';
 				addch(ACS_HLINE);
 			} else if (c == 'e' || c == 'E') {
+				mapArray[cols[0] * currentRow + currentCol] = 'e';
 				addch(ACS_URCORNER);
 			} else if (c == 'a' || c == 'd') {
+				mapArray[cols[0] * currentRow + currentCol] = 'a';
 				addch(ACS_VLINE);
 			} else if (c == 'z' || c == 'Z') {
+				mapArray[cols[0] * currentRow + currentCol] = 'z';
 				addch(ACS_LLCORNER);
 			} else if (c == 'c' || c == 'C') {
+				mapArray[cols[0] * currentRow + currentCol] = 'c';
 				addch(ACS_LRCORNER);
 			} else if (c == 'W'){
+				mapArray[cols[0] * currentRow + currentCol] = 'W';
 				addch(ACS_TTEE);
 			} else if (c == 'D'){
+				mapArray[cols[0] * currentRow + currentCol] = 'D';
 				addch(ACS_RTEE);
 			} else if (c == 'X'){
+				mapArray[cols[0] * currentRow + currentCol] = 'X';
 				addch(ACS_BTEE);
 			} else if(c == 'A'){
+				mapArray[cols[0] * currentRow + currentCol] = 'A';
 				addch(ACS_LTEE);
 			} else if (c == 's') {
+				mapArray[cols[0] * currentRow + currentCol] = 's';
 				addch(ACS_BULLET);
 			} else if (c == 'S') {
+				mapArray[cols[0] * currentRow + currentCol] = 'S';
 				addch(ACS_DIAMOND);
 			} else if (c == 'g' || c == 'G') {
+				mapArray[cols[0] * currentRow + currentCol] = 'g';
 				addch(ACS_CKBOARD);
 			} else if (c == 'p' || c == 'P') {
+				mapArray[cols[0] * currentRow + currentCol] = 'p';
 				addch(ACS_PI);
 			} else if (c == 'f' || c == 'F') {
+				mapArray[cols[0] * currentRow + currentCol] = 'f';
 				addch(ACS_STERLING);
 			} else if (c == ' ') {
+				mapArray[cols[0] * currentRow + currentCol] = ' ';
 				addch(' ');
 			}
 		}		
@@ -261,4 +357,3 @@ void  main(){
 	free(mapArray);
 	endwin();
 }
-

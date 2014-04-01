@@ -8,7 +8,8 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 	int i,j;
 	for (i = 0; i < 100; i++) {
 		buffer[i+10] = fileName[i];
-		if(fileName[i+1] == '\0'){
+		if(fileName[i+1] == ' '){
+			buffer[i+1] = '\n';
 			break;
 		}
 	}
@@ -41,7 +42,7 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 		fprintf(file, "%d\n",cols);
 
 //write the map array
-		printf("row: %d,cols: %d\n", rows, cols);
+//		printf("row: %d,cols: %d\n", rows, cols);
 		for (i = 0; i < rows; i++) {
 			for (j = 0; j < cols; j++) {
 				buffer[cols * i + j] = mapArray[cols * i + j];
@@ -53,8 +54,9 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 //				printf("row: %d, col: %d, char:  %c,origin  char %c \n", i, j,  buffer[cols * i + j],mapArray[cols * i +j]);
 			}
 		}
-		fclose(file);
+		
 	}
+	fclose(file);
 }
 /*
 void main(){
