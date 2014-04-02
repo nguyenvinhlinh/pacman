@@ -5,13 +5,13 @@ void writeFile(char * fileName, char * author, char * mapLevel, int  cols,int  r
 	FILE *file;
 	char buffer[100] = "../levels/";
 	for (int i = 0;;i++) {
-		if(fileName[i] == NULL){
+		if(fileName[i] == '\0'){
 			if(fileName[i-1] != 'c' || fileName[i-2] != 'a' || fileName[i-3] != 'p' || fileName[i-4] != '.') {
 				fileName[i] = '.';
 				fileName[i+1] = 'p';
 				fileName[i+2] = 'a';
 				fileName[i+3] = 'c';
-				fileName[i+4] = NULL;
+				fileName[i+4] = '\0';
 			}
 			break;
 		}
