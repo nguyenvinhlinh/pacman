@@ -7,7 +7,7 @@
 #include <ncurses.h>
 #include <string.h>
 #include <stddef.h>
-
+void cleanLastRow();
 void fullCommandMode(char * fileName, char * authorName, char * mapDescription, int * rows, int * cols, char * mapArray, int * isQuit){
 	int h,w;
 	getmaxyx(stdscr,h,w);
@@ -163,7 +163,7 @@ void fullCommandMode(char * fileName, char * authorName, char * mapDescription, 
 			} else if (strcmp(token1, "ca") == 0 && token2 != NULL){
 				//change the author information
 				for (int i = 0; ; i++) {
-					authorName[i] = token2[i];
+					authorName[i] = buffer[i+3];
 					if(authorName[i] == '\0')break;
 				}
 				clear();
@@ -173,11 +173,12 @@ void fullCommandMode(char * fileName, char * authorName, char * mapDescription, 
 				printw("Map level: %s\n", mapDescription);
 				printw("Number of Rows: %d\n", rows[0]);
 				printw("Number of Cols: %d\n", cols[0]);
+				renderMap(mapArray, rows[0], cols[0]);
 				break;
 			}else if (strcmp(token1, "cm")== 0 && token2 != NULL){
 				//change the map description
 				for (int i = 0; ; i++) {
-					mapDescription[i] = token2[i];
+					mapDescription[i] = buffer[i+3];
 					if(mapDescription[i] == '\0')break;
 				}
 				clear();
@@ -187,6 +188,7 @@ void fullCommandMode(char * fileName, char * authorName, char * mapDescription, 
 				printw("Map level: %s\n", mapDescription);
 				printw("Number of Rows: %d\n", rows[0]);
 				printw("Number of Cols: %d\n", cols[0]);
+				renderMap(mapArray, rows[0], cols[0]);
 				break;
 			} else {
 				getmaxyx(stdscr,h,w);

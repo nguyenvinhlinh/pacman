@@ -7,7 +7,14 @@ char * readFile(char * fileName,char * authorName, char * mapLevel, int * cols, 
 	char filePath[50] = "../levels/";
 	int i;
 	int j = 0;
-
+	for (i = 0;; i++) {
+		if(fileName[i] == '\0'){
+			if(fileName[i-1] != 'c' || fileName[i-2] != 'a' || fileName[i-3] != 'p'){
+				return NULL;
+			}
+			break;
+		}
+	}
 	for (i = 10; i < 50; i++) {
 		filePath[i] = fileName[j];
 		if(fileName[j++] == '\0')break;
