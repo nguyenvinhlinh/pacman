@@ -25,6 +25,11 @@ void editMode(char * fileName, char * authorName, char * mapDescription, int * r
 		}else if (c == ':') {
 			(void)fullCommandMode(fileName, authorName,mapDescription, rows, cols, mapArray, quitP);
 		}
+
+		if(c == '\n'){
+			move(getcury(stdscr) + 1, 0);
+		}
+		
 		if(getcury(stdscr) > 4 && getcury(stdscr) <= 4 + rows[0] && getcurx(stdscr) < cols[0]){
 			int currentRow;
 			int currentCol;
@@ -93,7 +98,7 @@ void cleanLastRow(){
 	move(h-1,0);
 	
 }
-void  main(){
+void  main(int argc, char * argv[]){
 	//init curses context
 	(void) initscr();
 	keypad(stdscr, TRUE);
@@ -114,8 +119,67 @@ void  main(){
 	cols[0] = 0;
 	int quit = 0;
 	int *  isQuit = &quit;
-	int h,w;
-	getmaxyx(stdscr,h,w);
+
+	//if argc == 2, the argument is fileName
+	if(argc == 2){
+		int h,w;
+		char bufferauthorName[100] = " ";
+		char bufferlevel[100] = " ";
+		int c = 0;
+		int r = 0;
+		char * pointerAuthor = &bufferauthorName[0];
+		char * pointerlevel = &bufferlevel[0];
+		int * pointerCols = &c;
+		int * pointerRows = &r;
+		char * buff = readFile(argv[1], pointerAuthor, pointerlevel, pointerCols, pointerRows);
+		if (buff == NULL){
+			getmaxyx(stdscr,h,w);
+			//clean the last row and move curse to the h-1,0
+			move(h-1,0);
+			for (int i = 0; i < w; i++) {
+				addch(' ');
+			}
+			move(h-1,0);
+			printw("File not found!");
+		} else {
+			//fileName
+			for (int i = 0;; i++) {
+				fileName[i] = argv[1][i];
+				if(fileName[i] == '\0')break;
+			}
+			//push bask to name and level variable
+			for (int i = 0;i < 100 ; i++) {
+				authorName[i] = pointerAuthor[i];
+				if(authorName[i] == '\0')break;
+			}
+			//level description
+			for (int i = 0;i < 100 ; i++) {
+				mapLevel[i] = pointerlevel[i];
+				if(mapLevel[i] == '\0')break;
+			}
+			//rows and cols
+			rows[0] = pointerRows[0];
+			cols[0] = pointerCols[0];
+			for (int i = 0; i < cols[0] * rows[0]; i++) {
+				mapArray[i] = buff[i];
+				if(i == rows[0] * cols[0] -1){
+					mapArray[i + 1] = '\0';
+				}
+			}		
+			clear();
+			move(0,0);
+			printw("File name: %s\n", fileName);
+			printw("AuthorName: %s\n", authorName);
+			printw("Map level: %s\n", mapLevel);
+			printw("Number of Rows: %d\n", rows[0]);
+			printw("Number of Cols: %d\n", cols[0]);
+			renderMap(mapArray, rows[0], cols[0]);
+			move(5,0);
+		}
+	}
+		
+
+	
 	editMode(fileName,authorName,mapLevel,rows,cols,mapArray);
     
 	free(rows);

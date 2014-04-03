@@ -3,10 +3,10 @@ CFLAGS=  -g -pg -std=c99
 SOURCES= readfile.c rendermap.c writefile.c commandmode.c  ProgramLaucher.c
 HEADERS= readfile.h rendermap.h writefile.h commandmode.h 		
 OBJS = $(patsubst %.c,%.o,$(SOURCES))
-
 LIBS= -lncurses
-ProgramLaucher:  $(HEADERS) $(OBJS) 
-	$(CC) $(CFLAGS) -o  ProgramLaucher $(SOURCES) $(LIBS)
+
+pacman:  $(HEADERS) $(OBJS) 
+	$(CC) $(CFLAGS) -o  pacman $(SOURCES) $(LIBS)
 
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -17,4 +17,4 @@ clean:
 
 .PHONY: cleanall
 cleanall:
-	rm *.o *~ ProgramLaucher
+	rm *.o  pacman

@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stddef.h>
 void cleanLastRow();
+char *strdup(const char *str);
 void fullCommandMode(char * fileName, char * authorName, char * mapDescription, int * rows, int * cols, char * mapArray, int * isQuit){
 	int h,w;
 	getmaxyx(stdscr,h,w);
@@ -207,4 +208,14 @@ void fullCommandMode(char * fileName, char * authorName, char * mapDescription, 
 			break;									  
 		}
 	}
+}
+char *strdup(const char *str)
+{
+    int n = strlen(str) + 1;
+    char *dup = malloc(n * sizeof(char));
+    if(dup)
+    {
+        strcpy(dup, str);
+    }
+    return dup;
 }
