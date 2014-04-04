@@ -3,6 +3,10 @@ Assignment: 1 - Make a map editor for game pacman
 Student 1: Nguyen Vinh Linh - s3410595
 Student 2: Doan Hai Dang - s3425475
 
+extra commands:
+:ca change author information including name and his email
+:cm change map information
+ 
 References:
 1. "Compiler error: warning: implicit declaration of function 'strdup'", http://cboard.cprogramming.com/c-programming/95462-compiler-error-warning-implicit-declaration-function-%27strdup%27.html
 

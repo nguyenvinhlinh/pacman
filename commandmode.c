@@ -147,7 +147,7 @@ void fullCommandMode(char * fileName, char * authorName, char * mapDescription, 
 					break;
 				}
 				for (int i = 0; i < rows[0] * cols[0]; i++) {
-					mapArray[i] = ' ';
+					mapArray[i] = 's';
 				}
 				clear();
 				move(0,0);

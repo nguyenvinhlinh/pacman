@@ -7,8 +7,7 @@
 #include <ncurses.h>
 #include <string.h>
 #include <stddef.h>
-/**This function clean the last row of terminal
- */
+
 void cleanLastRow();
 /** This is edit mode
   * @param fileName file name example zxc.pac
@@ -109,7 +108,7 @@ void cleanLastRow(){
 	move(h-1,0);
 	
 }
-void  main(int argc, char * argv[]){
+int main(int argc, char * argv[]){
 	//init curses context
 	(void) initscr();
 	keypad(stdscr, TRUE);
@@ -120,7 +119,7 @@ void  main(int argc, char * argv[]){
 	char name[100] = "unknown author";
 	char level[100] = "unknown level desciption";
 	
-	char * fileName = &file[0]; 
+	char * fileName = &file[0];  
 	char * authorName = &name[0];
 	char * mapLevel = &level[0];
 	int * rows = malloc(sizeof(int)* 1);
@@ -171,6 +170,7 @@ void  main(int argc, char * argv[]){
 			//rows and cols
 			rows[0] = pointerRows[0];
 			cols[0] = pointerCols[0];
+
 			for (int i = 0; i < cols[0] * rows[0]; i++) {
 				mapArray[i] = buff[i];
 				if(i == rows[0] * cols[0] -1){
@@ -179,11 +179,13 @@ void  main(int argc, char * argv[]){
 			}		
 			clear();
 			move(0,0);
+			attrset(COLOR_PAIR(1));
 			printw("File name: %s\n", fileName);
 			printw("AuthorName: %s\n", authorName);
 			printw("Map level: %s\n", mapLevel);
 			printw("Number of Rows: %d\n", rows[0]);
 			printw("Number of Cols: %d\n", cols[0]);
+			attrset(COLOR_PAIR(2));
 			renderMap(mapArray, rows[0], cols[0]);
 			move(5,0);
 		}
@@ -194,4 +196,6 @@ void  main(int argc, char * argv[]){
 	free(cols);
 	free(mapArray);
 	endwin();
+
+	return 0;
 }
