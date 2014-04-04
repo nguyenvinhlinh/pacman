@@ -7,7 +7,18 @@
 #include <ncurses.h>
 #include <string.h>
 #include <stddef.h>
+/**This function clean the last row of terminal
+ */
 void cleanLastRow();
+/** This is edit mode
+  * @param fileName file name example zxc.pac
+  * @param authorName author information including name and email
+  * address
+  * @param mapDescription the description of map
+  * @param rows number of rows
+  * @param cols number of columns
+  * @param mapArray the map
+  */
 void editMode(char * fileName, char * authorName, char * mapDescription, int * rows, int * cols, char * mapArray){
 	int quit = 0;
 	int * quitP = &quit;
@@ -177,9 +188,6 @@ void  main(int argc, char * argv[]){
 			move(5,0);
 		}
 	}
-		
-
-	
 	editMode(fileName,authorName,mapLevel,rows,cols,mapArray);
     
 	free(rows);

@@ -1,7 +1,9 @@
-/*
-  authorName: the author name and his email
-  mapLevel: the name of map, and its level (second line)
-  rowLength: the length of each row in the map
-  This function will return an array of char
- */
+/** This function will read file and return the array of map
+  * @param fileName file name example zxc.pac
+  * @param authorName author information including name and email
+  * address
+  * @param mapLevel the description of map
+  * @param rows number of rows
+  * @param cols number of columns
+  */
 char * readFile(char * fileName,char * authorName, char * mapLevel, int * rows, int * cols);

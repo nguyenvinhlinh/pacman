@@ -1,2 +1,4 @@
 temps/*
-a.out
+*.out
+*.o
+pacman
